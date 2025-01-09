@@ -27,7 +27,7 @@ BeforeAll(async () => {
     // Launch the browser once before all the tests
     // Serenity/JS will take care of managing Playwright browser context and browser tabs.
     browser = await playwright.chromium.launch({
-        headless: true,
+        headless: false,
     });
 
     // Configure Serenity/JS
@@ -44,8 +44,8 @@ BeforeAll(async () => {
         crew: [
             [ '@serenity-js/console-reporter', { theme: 'auto' } ],
             [ '@serenity-js/web:Photographer', {
-                // strategy: 'TakePhotosOfInteractions',    // capture screenshots of all the interactions; slower but more comprehensive
-                strategy: 'TakePhotosOfFailures',           // capture screenshots of failed interactions; much faster
+                 strategy: 'TakePhotosOfInteractions',    // capture screenshots of all the interactions; slower but more comprehensive
+                //strategy: 'TakePhotosOfFailures',           // capture screenshots of failed interactions; much faster
             } ],
             [ '@serenity-js/core:ArtifactArchiver', { outputDirectory: path.resolve(__dirname, '../../target/site/serenity') } ],
             [ '@serenity-js/serenity-bdd', { specDirectory: path.resolve(__dirname, '../../features') } ],

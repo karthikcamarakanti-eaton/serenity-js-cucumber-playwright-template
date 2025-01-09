@@ -1,4 +1,4 @@
-import { Ensure, includes } from '@serenity-js/assertions';
+import { Ensure, includes,not  } from '@serenity-js/assertions';
 import { Task } from '@serenity-js/core';
 import { By, isVisible, PageElement, Text } from '@serenity-js/web';
 
@@ -27,6 +27,31 @@ export class VerifyAuthentication {
             VerifyAuthentication.hasFlashAlert(),
             Ensure.that(Text.of(FlashMessages.flashAlert()), includes('Your username is invalid!')),
         )
+}
+export class VerifyFalseAuthentication {
+  private static hasNoFlashAlert = () =>
+    Task.where(
+      `#actor verifies that flash alert is present`,
+      Ensure.that(FlashMessages.flashAlert(), not(isVisible()))
+    );
+  static succeeded = () =>
+    Task.where(
+      `#actor verifies that authentication has succeeded`,
+      VerifyFalseAuthentication.hasNoFlashAlert(),
+      Ensure.that(
+        Text.of(FlashMessages.flashAlert()),
+        includes("You logged into a secure area!")
+      )
+    );
+  static failed = () =>
+    Task.where(
+      `#actor verifies that authentication has failed`,
+      VerifyFalseAuthentication.hasNoFlashAlert(),
+      Ensure.that(
+        Text.of(FlashMessages.flashAlert()),
+        includes("Your username is invalid!")
+      )
+    );
 }
 
 /**
